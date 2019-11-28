@@ -35,6 +35,18 @@ struct SplayTree {
 
     parent = g;
   }
+
+  void Print(string prefix=EMPTY, bool isRight=false, bool isRoot=true) {
+    if (child[1])
+      child[1]->Print(prefix + (!isRight && !isRoot? "|  ": "   "), true, false);
+
+    cout << prefix;
+    cout << (isRoot? "---" : (isRight? ".--" : "`--"));
+    cout << v << endl;
+
+    if (child[0])
+      child[0]->Print(prefix + (isRight? "|  ": "   "), false, false);
+  }
 };
 
 int main() {
