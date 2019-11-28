@@ -50,6 +50,42 @@ struct SplayTree {
 };
 
 int main() {
+  SplayTree* w = new SplayTree(1);
+  SplayTree* x = new SplayTree(2);
+  SplayTree* y = new SplayTree(3);
+  SplayTree* z = new SplayTree(4);
+  SplayTree* a = new SplayTree(5);
+  SplayTree* b = new SplayTree(6);
+  SplayTree* c = new SplayTree(7);
+  SplayTree* d = new SplayTree(8);
+  SplayTree* e = new SplayTree(9);
+  SplayTree* f = new SplayTree(10);
+  SplayTree* g = new SplayTree(11);
 
+  w->child[1] = x;
+  x->parent = w;
+  x->child[1] = y;
+  y->parent = x;
+  y->child[1] = z;
+  z->parent = y;
+  z->child[1] = a;
+  a->parent = z;
+  a->child[1] = b;
+  b->parent = a;
+  b->child[1] = c;
+  c->parent = b;
+  c->child[1] = d;
+  d->parent = c;
+  d->child[1] = e;
+  e->parent = d;
+  e->child[1] = f;
+  f->parent = e;
+  f->child[1] = g;
+  g->parent = f;
+
+  SplayTree* root = w;
+
+  root->Print();
+  cerr << "#########################\n";
   return 0;
 }
