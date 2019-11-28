@@ -102,5 +102,15 @@ int main() {
 
   root->Print();
   cerr << "#########################\n";
+
+  g->Splay();
+  root = g;
+  root->Print();
+  cerr << "#########################\n";
+
+  c->Splay();
+  root = c;
+  root->Print();
+  cerr << "#########################\n";
   return 0;
 }
