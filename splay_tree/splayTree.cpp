@@ -36,6 +36,21 @@ struct SplayTree {
     parent = g;
   }
 
+  void Splay() {
+    while (parent != NULL) {
+      if (parent->parent != NULL) {
+        bool parentIsLeft = parent->parent->child[0] == parent;
+        bool isLeft = parent->child[0] == this;
+
+        if (parentIsLeft == isLeft)
+          parent->Rotate();
+        else Rotate();
+      }
+
+      Rotate();
+    }
+  }
+
   void Print(string prefix=EMPTY, bool isRight=false, bool isRoot=true) {
     if (child[1])
       child[1]->Print(prefix + (!isRight && !isRoot? "|  ": "   "), true, false);
