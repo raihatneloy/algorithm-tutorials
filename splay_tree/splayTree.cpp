@@ -51,6 +51,57 @@ struct SplayTree {
     }
   }
 
+  SplayTree* FindNode(int v) {
+    SplayTree *x = this;
+    SplayTree *xx = NULL;
+
+    while (x != NULL) {
+      xx = x;
+
+      if (x->v > v) {
+        x = x->child[0];
+      }
+
+      else if (x->v < v) {
+        x = x->child[1];
+      }
+
+      else return x;
+    }
+
+    return xx;
+  }
+
+  SplayTree* Search(int v) {
+    SplayTree* x = FindNode(v);
+
+    x->Splay();
+    return x;
+  }
+
+  SplayTree* Insert(int v) {
+    SplayTree* par = FindNode(v);
+
+    if (par->v == v) {
+      par->Splay();
+      return par;
+    }
+
+    SplayTree* x = new SplayTree(v);
+
+    if (par->v < v) {
+      par->child[1] = x;
+    }
+    else if (par->v > v) {
+      par->child[0] = x;
+    }
+
+    x->parent = par;
+    x->Splay();
+
+    return x;
+  }
+
   void Print(string prefix=EMPTY, bool isRight=false, bool isRoot=true) {
     if (child[1])
       child[1]->Print(prefix + (!isRight && !isRoot? "|  ": "   "), true, false);
@@ -110,6 +161,34 @@ int main() {
 
   c->Splay();
   root = c;
+  root->Print();
+  cerr << "#########################\n";
+
+  root = root->Search(6);
+  root->Print();
+  cerr << "#########################\n";
+
+  if (root->v == 6) {
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
+
+  root = root->Search(0);
+  root->Print();
+  cerr << "#########################\n";
+
+  if (root->v == 0) {
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
+
+  root = root->Insert(13);
+  root->Print();
+  cerr << "#########################\n";
+
+  root = root->Insert(12);
   root->Print();
   cerr << "#########################\n";
   return 0;
