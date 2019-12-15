@@ -102,6 +102,50 @@ struct SplayTree {
     return x;
   }
 
+  SplayTree* FindMax(SplayTree* root) {
+    SplayTree* x = NULL;
+
+    while (root != NULL) {
+      x = root;
+      root = root->child[1];
+    }
+
+    return x;
+  }
+
+  SplayTree* Delete(int v) {
+    SplayTree* x = FindNode(v);
+    x->Splay();
+
+    if (x->v != v) {
+      return x;
+    }
+
+    SplayTree* leftSubTree = x->child[0];
+    SplayTree* rightSubTree = x->child[1];
+
+    x->child[0] = x->child[1] = NULL;
+
+    if (leftSubTree != NULL)
+      leftSubTree->parent = NULL;
+    if (rightSubTree != NULL)
+      rightSubTree->parent = NULL;
+
+    if (leftSubTree != NULL) {
+      SplayTree* maxNode = FindMax(leftSubTree);
+
+      maxNode->child[1] = rightSubTree;
+
+      if (rightSubTree != NULL)
+        rightSubTree->parent = maxNode;
+
+      maxNode->Splay();
+      return maxNode;
+    }
+
+    return rightSubTree;
+  }
+
   void Print(string prefix=EMPTY, bool isRight=false, bool isRoot=true) {
     if (child[1])
       child[1]->Print(prefix + (!isRight && !isRoot? "|  ": "   "), true, false);
@@ -189,6 +233,18 @@ int main() {
   cerr << "#########################\n";
 
   root = root->Insert(12);
+  root->Print();
+  cerr << "#########################\n";
+
+  root = root->Delete(8);
+  root->Print();
+  cerr << "#########################\n";
+
+  root = root->Delete(9);
+  root->Print();
+  cerr << "#########################\n";
+
+  root = root->Delete(5);
   root->Print();
   cerr << "#########################\n";
   return 0;
