@@ -51,6 +51,18 @@ struct SplayTree {
     }
   }
 
+  void Destroy() {
+    SplayTree* par = parent;
+
+    if (par != NULL) {
+      bool isRight = (par->child[1] == this);
+
+      par->child[isRight] = NULL;
+    }
+
+    parent = NULL;
+  }
+
   SplayTree* FindNode(int v) {
     SplayTree *x = this;
     SplayTree *xx = NULL;
@@ -144,6 +156,34 @@ struct SplayTree {
     }
 
     return rightSubTree;
+  }
+
+  pair<SplayTree*, SplayTree*> SplitByValue(int v) {
+    SplayTree* x = FindNode(v);
+    x->Splay();
+
+    SplayTree *leftTree, *rightTree;
+
+    if (x->v <= v) {
+      // Destroy right edge
+
+      leftTree = x;
+      rightTree = x->child[1];
+
+      if (x->child[1] != NULL)
+        x->child[1]->Destroy();
+    }
+
+    else {
+      // Destroy left edge
+      leftTree = x->child[0];
+      rightTree = x;
+
+      if (x->child[0] != NULL)
+        x->child[0]->Destroy();
+    }
+
+    return make_pair(leftTree, rightTree);
   }
 
   void Print(string prefix=EMPTY, bool isRight=false, bool isRoot=true) {
@@ -247,5 +287,19 @@ int main() {
   root = root->Delete(5);
   root->Print();
   cerr << "#########################\n";
+
+  pair<SplayTree*, SplayTree*> roots = root->SplitByValue(5);
+  if (roots.first != NULL) {
+    cerr << "First Tree\n";
+    roots.first->Print();
+    cerr << "#########################\n";
+  }
+
+  if (roots.second != NULL) {
+    cerr << "Second Tree\n";
+    roots.second->Print();
+    cerr << "#########################\n";
+  }
+
   return 0;
 }
