@@ -6,12 +6,24 @@ const string EMPTY="";
 
 struct SplayTree {
   int v; // Value of node
+  int size; // Subtree size
   SplayTree *child[2]; // Left child -> [0], right child -> [1]
   SplayTree *parent; // Parent of node
 
   SplayTree(int _v) {
     v = _v;
     child[0] = child[1] = parent = NULL;
+  }
+
+  int GetSize(SplayTree *x) {
+    if (x == NULL)
+      return 0;
+
+    return x->size;
+  }
+
+  void Update() {
+    size = 1 + GetSize(child[0]) + GetSize(child[1]);
   }
 
   void Rotate() {
@@ -32,6 +44,9 @@ struct SplayTree {
 
       g->child[parentIsLeft ^ 1] = this;
     }
+
+    parent->Update();
+    Update();
 
     parent = g;
   }
@@ -108,6 +123,8 @@ struct SplayTree {
       par->child[0] = x;
     }
 
+    par->Update();
+
     x->parent = par;
     x->Splay();
 
@@ -147,6 +164,7 @@ struct SplayTree {
       SplayTree* maxNode = FindMax(leftSubTree);
 
       maxNode->child[1] = rightSubTree;
+      maxNode->Update();
 
       if (rightSubTree != NULL)
         rightSubTree->parent = maxNode;
@@ -183,6 +201,8 @@ struct SplayTree {
         x->child[0]->Destroy();
     }
 
+    leftTree->Update();
+    rightTree->Update();
     return make_pair(leftTree, rightTree);
   }
 
@@ -192,7 +212,7 @@ struct SplayTree {
 
     cout << prefix;
     cout << (isRoot? "---" : (isRight? ".--" : "`--"));
-    cout << v << endl;
+    cout << v << "(" << size << ")" << endl;
 
     if (child[0])
       child[0]->Print(prefix + (isRight? "|  ": "   "), false, false);
@@ -200,106 +220,135 @@ struct SplayTree {
 };
 
 int main() {
-  SplayTree* w = new SplayTree(1);
-  SplayTree* x = new SplayTree(2);
-  SplayTree* y = new SplayTree(3);
-  SplayTree* z = new SplayTree(4);
-  SplayTree* a = new SplayTree(5);
-  SplayTree* b = new SplayTree(6);
-  SplayTree* c = new SplayTree(7);
-  SplayTree* d = new SplayTree(8);
-  SplayTree* e = new SplayTree(9);
-  SplayTree* f = new SplayTree(10);
-  SplayTree* g = new SplayTree(11);
+  // SplayTree* w = new SplayTree(1);
+  // SplayTree* x = new SplayTree(2);
+  // SplayTree* y = new SplayTree(3);
+  // SplayTree* z = new SplayTree(4);
+  // SplayTree* a = new SplayTree(5);
+  // SplayTree* b = new SplayTree(6);
+  // SplayTree* c = new SplayTree(7);
+  // SplayTree* d = new SplayTree(8);
+  // SplayTree* e = new SplayTree(9);
+  // SplayTree* f = new SplayTree(10);
+  // SplayTree* g = new SplayTree(11);
 
-  w->child[1] = x;
-  x->parent = w;
-  x->child[1] = y;
-  y->parent = x;
-  y->child[1] = z;
-  z->parent = y;
-  z->child[1] = a;
-  a->parent = z;
-  a->child[1] = b;
-  b->parent = a;
-  b->child[1] = c;
-  c->parent = b;
-  c->child[1] = d;
-  d->parent = c;
-  d->child[1] = e;
-  e->parent = d;
-  e->child[1] = f;
-  f->parent = e;
-  f->child[1] = g;
-  g->parent = f;
+  // w->child[1] = x;
+  // x->parent = w;
+  // x->child[1] = y;
+  // y->parent = x;
+  // y->child[1] = z;
+  // z->parent = y;
+  // z->child[1] = a;
+  // a->parent = z;
+  // a->child[1] = b;
+  // b->parent = a;
+  // b->child[1] = c;
+  // c->parent = b;
+  // c->child[1] = d;
+  // d->parent = c;
+  // d->child[1] = e;
+  // e->parent = d;
+  // e->child[1] = f;
+  // f->parent = e;
+  // f->child[1] = g;
+  // g->parent = f;
 
-  SplayTree* root = w;
+  // SplayTree* root = w;
 
-  root->Print();
-  cerr << "#########################\n";
+  // root->Print();
+  // cerr << "#########################\n";
 
-  g->Splay();
-  root = g;
-  root->Print();
-  cerr << "#########################\n";
+  // g->Splay();
+  // root = g;
+  // root->Print();
+  // cerr << "#########################\n";
 
-  c->Splay();
-  root = c;
-  root->Print();
-  cerr << "#########################\n";
+  // c->Splay();
+  // root = c;
+  // root->Print();
+  // cerr << "#########################\n";
 
-  root = root->Search(6);
-  root->Print();
-  cerr << "#########################\n";
+  // root = root->Search(6);
+  // root->Print();
+  // cerr << "#########################\n";
 
-  if (root->v == 6) {
-    cout << "Yes" << endl;
-  } else {
-    cout << "No" << endl;
-  }
+  // if (root->v == 6) {
+  //   cout << "Yes" << endl;
+  // } else {
+  //   cout << "No" << endl;
+  // }
 
-  root = root->Search(0);
-  root->Print();
-  cerr << "#########################\n";
+  // root = root->Search(0);
+  // root->Print();
+  // cerr << "#########################\n";
 
-  if (root->v == 0) {
-    cout << "Yes" << endl;
-  } else {
-    cout << "No" << endl;
-  }
+  // if (root->v == 0) {
+  //   cout << "Yes" << endl;
+  // } else {
+  //   cout << "No" << endl;
+  // }
 
+  // root = root->Insert(13);
+  // root->Print();
+  // cerr << "#########################\n";
+
+  // root = root->Insert(12);
+  // root->Print();
+  // cerr << "#########################\n";
+
+  // root = root->Delete(8);
+  // root->Print();
+  // cerr << "#########################\n";
+
+  // root = root->Delete(9);
+  // root->Print();
+  // cerr << "#########################\n";
+
+  // root = root->Delete(5);
+  // root->Print();
+  // cerr << "#########################\n";
+
+  // pair<SplayTree*, SplayTree*> roots = root->SplitByValue(5);
+  // if (roots.first != NULL) {
+  //   cerr << "First Tree\n";
+  //   roots.first->Print();
+  //   cerr << "#########################\n";
+  // }
+
+  // if (roots.second != NULL) {
+  //   cerr << "Second Tree\n";
+  //   roots.second->Print();
+  //   cerr << "#########################\n";
+  // }
+
+  SplayTree *root = new SplayTree(1);
+
+  root = root->Insert(10);
+  root = root->Insert(5);
+  root = root->Insert(6);
+  root = root->Insert(17);
+  root = root->Insert(21);
+  root = root->Insert(2);
+  root = root->Insert(30);
+  root = root->Insert(15);
+  root = root->Insert(7);
   root = root->Insert(13);
+
   root->Print();
   cerr << "#########################\n";
 
-  root = root->Insert(12);
+  root = root->Delete(7);
+
   root->Print();
   cerr << "#########################\n";
 
-  root = root->Delete(8);
-  root->Print();
+  pair<SplayTree*, SplayTree*> roots = root->SplitByValue(13);
+
+  roots.first->Print();
   cerr << "#########################\n";
 
-  root = root->Delete(9);
-  root->Print();
+  roots.second->Print();
   cerr << "#########################\n";
-
-  root = root->Delete(5);
-  root->Print();
-  cerr << "#########################\n";
-
-  pair<SplayTree*, SplayTree*> roots = root->SplitByValue(5);
-  if (roots.first != NULL) {
-    cerr << "First Tree\n";
-    roots.first->Print();
-    cerr << "#########################\n";
-  }
-
-  if (roots.second != NULL) {
-    cerr << "Second Tree\n";
-    roots.second->Print();
-    cerr << "#########################\n";
-  }
 
   return 0;
 }
